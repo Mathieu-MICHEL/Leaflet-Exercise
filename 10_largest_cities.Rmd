@@ -1,0 +1,55 @@
+---
+title: "Leaflet Exercise"
+author: "Mathieu MICHEL"
+date: "27/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(leaflet)
+library(xlsx)
+library(tidyverse)
+
+```
+
+## Data loading
+
+
+```{r loading}
+# Load Data
+
+#setwd("C:/Users/mathi/Documents/R/Mapping")
+
+data <- read.xlsx("Largest Cities.xlsx",
+                  sheetIndex=1,
+                  header = T) 
+
+
+# Comment
+
+data$tip <- str_c(data$city,"<br>",floor(data$pop/1000000),"M")
+
+```
+
+## Leaflet Map
+
+Here it is:
+
+```{r pressure, echo=FALSE}
+# Map Design 
+
+data %>% 
+   leaflet() %>%
+   addTiles() %>%
+   addCircleMarkers(
+      popup = data$tip,
+      radius = ~pop/3000000,
+      color = "red",
+      fill = "red",
+      stroke = FALSE, fillOpacity = 0.5
+      )
+```
+
+source: https://en.wikipedia.org/wiki/List_of_largest_cities
